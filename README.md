@@ -8,7 +8,7 @@ Den uses a header file called Domptero, which is a modified version of modified 
 
 ## Getting Started
 
-To install, simply run...
+To update and install, simply run...
 
     git clone https://github.com/Cactical/Den.git --recurse-submodules; cd Den
     
