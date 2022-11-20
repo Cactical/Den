@@ -10,6 +10,8 @@ Made with love :)
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <cstdint>
+#include <filesystem>
 #include <signal.h>
 #include "CppColors/cppcolors.hpp"
 #include "Domptero.hpp"

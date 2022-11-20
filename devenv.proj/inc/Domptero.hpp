@@ -270,9 +270,9 @@ void configloader() {
         if (configfileoutput == "" || configfileoutput == "**") {
         
             username = "NO USERNAME";
-            colorrule1 = 1;
-            colorrule2 = 1;
-            colorrule3 = 1;
+            colorrule1 = "1";
+            colorrule2 = "1";
+            colorrule3 = "1";
             primarycolor = blue;
             sidecolor = cyan;
             importantcolor = yellow;
@@ -394,6 +394,7 @@ void userprompthandler() {
 -------------------------------------------
 Input from this prompt is dumped into the var userinput. */
 void userprompt() {
+    
     if (username == "NO USERNAME") {
 
         std::cout << sidecolor << " "; std::getline(std::cin, userinput); std::cout << white;
@@ -404,6 +405,7 @@ void userprompt() {
         std::cout << sidecolor << username << "  "; std::getline(std::cin, userinput); std::cout << white;
 
     }
+
 }
 
 /* userinputhandler func. Handles user input.
@@ -414,7 +416,7 @@ void userinputhandler() {
         infocommand();        
     } else if (userinput == "version") {
         versioncommand();
-    }  else if (userinput == "end") {
+    }  else if (userinput == "end" || userinput == "q" || userinput == "exit" || userinput == "quit") {
         std::cout << importantcolor << "Are you sure you want to end?";
         yon();
         if (yoninput == "Y") {
@@ -422,6 +424,10 @@ void userinputhandler() {
         } else if (yoninput == "N") {
             // Throw "command cancelled" output
             xOUTPUTt1 = true;
+        } else {
+            
+            // Do nothing
+
         }
     } else if (userinput == "config") {
         configcommand();
@@ -488,7 +494,7 @@ void yon() {
     } else {
 
         xERRORt1s1 = true;
-        x();
+
     }
 
 }
