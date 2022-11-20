@@ -1,0 +1,3 @@
+[submodule "devenv.proj/inc/CppColors"]
+	path = devenv.proj/inc/CppColors
+	url = https://github.com/Cactical/CppColors.git
