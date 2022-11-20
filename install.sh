@@ -1,11 +1,11 @@
 #!/bin/bash
 echo "DEN install script (Version 0.1)"
-echo "Creating build dir..."
+echo "#### Creating build dir... #### "
 cmake -S . -B build
 cd build 
-echo "Building..."
+echo "#### Building... ####"
 cmake --build . 
 mv devenv ..
 cd ..
-echo "Done! Run './devenv' to start DEN
+echo "Done! Run './devenv' to start DEN"
  
