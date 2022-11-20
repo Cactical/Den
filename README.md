@@ -4,7 +4,7 @@ Den (short for DEveNv (which is short for developer environment)) is a developer
 
 Den is also a mini shell, and you can run its own commands, have your own username (and colors), + more!
 
-Den uses a header file called Domptero, which is a modified version of modified version of [Promptero](https://github.com/Cactical/Promptero).
+Den uses a header file called Domptero, which is a modified version of modified version of my project [Promptero](https://github.com/Cactical/Promptero), and a submodule which is also my project, [CppColors](https://github.com/Cactical/CppColors).
 
 ## Getting Started
 
