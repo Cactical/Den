@@ -1,7 +1,5 @@
 # Den
 
-[Version 0.1)-----(11/21/22]
-
 Den (short for DEveNv (which is short for developer environment)) is a developer environment that you can develop code in, basically a mini IDE in the terminal.
 
 Den is also a mini shell, and you can run its own commands, have your own username (and colors), + more!
@@ -14,7 +12,9 @@ To install, simply run...
 
     git clone https://github.com/Cactical/Den.git --single-branch denscripts; cd denscripts
 
-    sh install.sh # is also a update script
+    sh install.sh 
+
+Note: install.sh is also a update script.
 
 Upon running it, you will enter a prompt where you can enter Den's commands.
 
@@ -25,3 +25,5 @@ To get Den configured, run the Config command, "config".
 To get started with Den, run the Filetools command, "filetools", so you can start creating and editing files in Den.
 
 To exit Den, please run the End command, "end".
+
+[Version 0.1)-----(11/21/22]
