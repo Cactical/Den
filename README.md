@@ -10,7 +10,8 @@ Den uses a header file called Domptero, which is a modified version of of my pro
 
 To install, simply run...
 
-    git clone https://github.com/Cactical/Den.git --single-branch denscripts; cd denscripts
+    git clone https://github.com/Cactical/Den.git --branch denscripts --single-branch denscripts 
+    cd denscripts 
 
     sh install.sh 
 
