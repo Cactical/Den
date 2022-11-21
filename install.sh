@@ -14,5 +14,6 @@ echo "#### Cleaning up... ####"
 rm -rf build
 rm -rf devenv.proj
 rm -rf CMakeLists.txt
+sudo rm -rf /usr/local/bin/devenv
 sudo mv devenv /usr/local/bin/
 echo "## Done! Run './devenv' to start DEN ##"
