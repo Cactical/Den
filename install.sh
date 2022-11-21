@@ -1,5 +1,7 @@
 #!/bin/bash
 echo "## DEN install script (Version 0.1) ##"
+echo "Restoring build files"
+git restore .
 echo "Pulling from remote..."
 git pull --recurse-submodules
 echo "#### Creating build dir... #### "
