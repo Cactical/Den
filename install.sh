@@ -10,7 +10,7 @@ ls
 cd ..
 cd ..
 echo "#### Creating build dir... #### "
-cmake -S . -B build
+cmake -S . -B build /usr/bin/clang 
 cd build 
 echo "#### Building... ####"
 cmake --build . --config Release --target all
