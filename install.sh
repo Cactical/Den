@@ -5,17 +5,18 @@ cd
 git clone https://github.com/Cactical/Den.git --branch dencode --single-branch dencode
 echo "### Entering code dir... #### "
 cd dencode 
+cd devenv.proj/inc 
+ls 
+cd ..
+cd ..
 echo "#### Creating build dir... #### "
 cmake -S . -B build
 cd build 
 echo "#### Building... ####"
-cmake --build . 
+cmake --build . --config Release --target all
 mv devenv ..
 cd ..
 echo "#### Cleaning up... ####"
-rm -rf build
-rm -rf devenv.proj
-rm -rf CMakeLists.txt
 cd ..
 rm -rf dencode
 sudo rm -rf /usr/local/bin/devenv
