@@ -2,7 +2,7 @@
 echo "## DEN install script (Version 0.1) ##"
 echo "#### Pulling Den scripts from remote... ####"
 git pull
-echo "#### Pulling Den code from remote... ####"
+echo "#### Cloning Den code from remote... ####"
 cd
 git clone https://github.com/Cactical/Den.git --branch dencode --single-branch --recurse-submodules dencode
 echo "### Entering code dir... #### "
