@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "## DEN install script (Version 0.1) ##"
-echo "Restoring build files"
-echo "Pulling Den code from remote..."
+echo "#### Pulling Den code from remote... ####"
+cd
 git clone https://github.com/Cactical/Den.git --branch dencode --single-branch dencode
-echo "Entering code dir... "
+echo "### Entering code dir... #### "
 cd dencode 
 echo "#### Creating build dir... #### "
 cmake -S . -B build
