@@ -13,3 +13,5 @@ These are some scripts to install, update, and uninstall Den.
 + update.sh
 
   + This script updates the scripts (not DEN itself).
+
+[Version 0.1)-----(11/23/22]
