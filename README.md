@@ -8,16 +8,19 @@ Den uses a header file called Domptero, which is a modified version of of my pro
 
 ## Getting Started
 
-To install, simply run...
+There are some shell scripts that you can use to install and uninstall DEN, there is also a update shell script that updates the scripts (not DEN itself).
+
+To install and use them, simply run...
 
     git clone https://github.com/Cactical/Den.git --branch denscripts --single-branch denscripts 
+    
     cd denscripts 
 
-    sh install.sh 
+Then..
 
-Note: install.sh is also a update script.
+    sh <install/uninstall/update>.sh
 
-Upon running it, you will enter a prompt where you can enter Den's commands.
+Upon running DEN, you will enter a prompt where you can enter Den's commands.
 
 To see some basic info about Den or the version of Den, run the Info command, "info".
 
@@ -27,4 +30,4 @@ To get started with Den, run the Filetools command, "filetools", so you can star
 
 To exit Den, please run the End command, "end".
 
-[Version 0.1)-----(11/21/22]
+[Version 0.1)-----(11/23/22]
