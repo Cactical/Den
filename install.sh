@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "## DEN install script (Version 0.1) ##"
 echo "#### This script builds and installs the latest version of DEN. ####"
+echo "#### This script also uninstalls and reinstalls DEN if already installed, so it can be used to update DEN. ####"
 echo "#### Pulling Den scripts from remote... ####"
 git pull https://github.com/Cactical/Den.git denscripts
 echo "#### Cloning Den code from remote... ####"
