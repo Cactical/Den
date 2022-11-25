@@ -22,4 +22,4 @@ cd ..
 echo "#### Cleaning up... ####"
 cd ..
 sudo rm -rf ~/dencode
-echo "## Done! Run 'devenv' to start DEN ##"
+echo "## Done! Run 'devenv' to start DEN. ##"
