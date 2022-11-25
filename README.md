@@ -18,7 +18,7 @@ To install and use them, simply run...
 
 Then..
 
-    sh <install/uninstall/update>.sh
+    ./<install/update/uninstall>
 
 Upon running DEN, you will enter a prompt where you can enter Den's commands.
 
