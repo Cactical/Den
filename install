@@ -34,6 +34,6 @@ sudo mv devenv /usr/local/bin/
 echo "#### Cleaning up... ####"
 
 cd /tmp
-sudo rm -rf ~/dencode
+sudo rm -rf dencode
 
 echo "## Done! Run 'devenv' to start DEN. ##"
