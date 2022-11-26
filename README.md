@@ -15,4 +15,4 @@ These are some scripts to install, update, and uninstall Den.
 
   + This script updates the scripts (not DEN itself).
 
-[Version 1)-----(11/24/22]
+[No Version)-----(11/24/22]
