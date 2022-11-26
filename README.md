@@ -16,4 +16,5 @@ These are some scripts to install, update, and uninstall Den.
   + This script updates the scripts (not DEN itself).
 
 [Version)-----(No Version]
+
 [Date of Last Commit)-----(11/24/22]
