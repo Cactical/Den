@@ -558,7 +558,7 @@ void configcommand() {
     std::cout << primarycolor;
     std::cout << "Den config command - 0.1\n";
     std::cout << importantcolor;
-    std::cout << "This command is still in heavy development and as of now you can only use it to save your username.\n"; // TODO remove this once setup command finished
+    std::cout << "This command is still in heavy development and as of now you can only use it to save your username.\n"; // TODO remove this once config command finished
     std::cout << "This command can make a Den configuration file named \".devenvconfig\" that will contain configuration settings for Den (ex. username, colors, etc.)\n";
     std::cout << "It can also load a existing Den configuration file. Once Den is restarted, the changes will not be saved unless you change the existing file to the default configuration file.\n";
     std::cout << "Den will always load the Den configuration file simply named \".devenvconfig\". This is the default configuration file and can not be changed, but this command can change a Den configuration file to the default.\n";
@@ -703,7 +703,7 @@ void filetoolscommand() {
     std::cout << "3 - Read a file.\n";
     std::cout << "|\n";
     std::cout << "4 - List contents of current directory.\n";
-    std::cout << "|\n";
+    std::cout << "|\\__4.1 - Include hidden files. \n";
     std::cout << "C - Cancel command.\n";
     std::cout << "\\___ ";
     
@@ -782,6 +782,11 @@ void filetoolscommand() {
         std::cout << "The contents of this current directory are... " << std::endl; std::system("ls"); 
         // TODO replace this system call with a pipe
 
+    } else if (userinput == "4.1") {
+
+        std::cout << "The contents of this current directory (including hidden files) are..." << std::endl; std::system("ls -a");
+
+    
     } else {
        
         xERRORt1s1 = true;
