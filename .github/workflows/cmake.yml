@@ -1,31 +1,14 @@
-- name: Build & Test
-
-        uses: ashutoshvarma/action-cmake-build@master
-
+- name: Build CMake
+  uses: ashutoshvarma/action-cmake-build@v1
         with:
-
           build-dir: ${{ runner.workspace }}/build
-
           # will set the CC & CXX for cmake
-
           cc: clang
-
           cxx: clang++
-
           build-type: Release
-
           # Extra options pass to cmake while configuring project
-
           configure-options: -DCMAKE_C_FLAGS=-w32 -DPNG_INCLUDE=OFF
-
-
-
-          
-
           # install the build using cmake --install
-
           install-build: true
-
           # run build using '-j [parallel]' to use multiple threads to build
-
           parallel: 14
