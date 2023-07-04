@@ -68,10 +68,15 @@ std::string userinput;
 Name of the Denenv configuration file, mostly used by Denenv.cpp. */
 std::string configfilename = ".devenvconfig";
 
-/* configfile var. Den configuration file. | devenv configuration setting
+/* configfile var. (INPUT VERSION) Den configuration file. | devenv configuration setting
 -------------------------------------------
 A file with configuration settings, these settings are mapped to devenv configuration setting variables in the devenv.cpp file. */
-std::ifstream configfile(configfilename);
+std::ifstream configfile_I(configfilename);
+
+/* configfile var. (OUTPUT VERSION) Den configuration file. | devenv configuration setting
+-------------------------------------------
+A file with configuration settings, these settings are mapped to devenv configuration setting variables in the devenv.cpp file. */
+std::ofstream configfile_O(configfilename);
 
 /* configfileoutput var. Output from configfile. 
 -------------------------------------------
@@ -98,10 +103,20 @@ int fileline = 1;
 The column of a file fstream is reading. */
 int filecolumn = 1;
 
-/* textrule var. sets the text style (default: normal).
+/* pcrule var. sets the prompt character (default: ">").
 -------------------------------------------
-Is a rule that sets the text style, if n: normal, if b: bold. */
-std::string textrule;
+Is a rule that sets the prompt character, if 1: ">", if 2: "". */
+std::string pcrule;
+
+/* textrule1 var. sets the 1st text style (default: normal).
+-------------------------------------------
+Is a rule that sets the 1st text style (bold text), if 1: normal, if 2: bold. */
+std::string textrule1;
+
+/* textrule2 var. sets the 2nd text style (default: normal).
+-------------------------------------------
+Is a rule that sets the 2nd text style (bright text), if 1: normal, if 2: bold. */
+std::string textrule2;
 
 /* colorrule1 var. sets the primary color (default: blue).
 -------------------------------------------
@@ -145,8 +160,13 @@ std::string errorcolor = magenta;
 
 /* whatists1 var. Displays what the 1st text style is when printed.
 -------------------------------------------
-Can either be "Off" (normal) or "Enabled" (bold). */
+Can either be "Disabled" (normal) or "Enabled" (bright). */
 std::string whatists1;
+
+/* whatists2 var. Displays what the 2nd text style is when printed.
+-------------------------------------------
+Can either be "Disabled" (normal) or "Enabled" (bold). */
+std::string whatists2;
 
 /* whatispc var. Displays what the primary color is when printed.
 -------------------------------------------
@@ -267,6 +287,7 @@ void master() {
         
         // Turn off configdoneswitch when loader is done
         configdoneswitch = true;
+        configfile_I.close();
 
         std::cout << "Done!\n";
 
@@ -295,7 +316,7 @@ void master() {
 Loads and saves (maps them to a variable) devenv configuration settings  */
 void configloader() {
 
-    while (getline(configfile, configfileoutput)) {
+    while (getline(configfile_I, configfileoutput)) {
         
         std::cout << "Line " << fileline << " | " << configfileoutput << "\n";
 
@@ -303,14 +324,16 @@ void configloader() {
         if (configfileoutput == "" || configfileoutput == "**") {
         
             username = "NO USERNAME";
-            colorrule1 = "1";
-            colorrule2 = "1";
-            colorrule3 = "1";
+            promptcharacter = ">";
             primarycolor = blue;
             sidecolor = cyan;
             importantcolor = yellow;
-
-            configdoneswitch = true;
+            whatispc = "Blue";
+            whatissc = "Cyan";
+            whatisic = "Yellow";
+            whatists1 = "Disabled";
+            whatists2 = "Disabled";           
+           
 
         } else if (fileline == 1) {
             
@@ -330,7 +353,34 @@ void configloader() {
         } else if (fileline == 2) {
             
             fileline++;
-            // Line 2 | primary color settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // Line 2 | the prompt character will be on this line
+            // configloader: Prompt Character Loader | loads the prompt character based on the configuration settings
+            pcrule = configfileoutput;
+
+            if (pcrule == "1") {
+            
+                promptcharacter = ">";
+            
+            } else if (pcrule == "2") {
+                
+                promptcharacter = "";
+
+            } else if (pcrule == "*") {
+                
+                promptcharacter = ">";
+
+            } else {
+                
+                promptcharacter = ">";
+
+            }
+            
+            std::cout << "Done with line 2!\n";
+
+        } else if (fileline == 3) {
+            
+            fileline++;
+            // Line 3 | primary color settings will be on this line, if there is nothing on this line then the default color settings are used.
             // configloader: Color Loader 1 | loads the colors based on the configuration settings
             colorrule1 = configfileoutput;
 
@@ -356,12 +406,12 @@ void configloader() {
 
             }
             
-            std::cout << "Done with line 2!\n";
+            std::cout << "Done with line 3!\n";
 
-        } else if (fileline == 3) {
+        } else if (fileline == 4) {
 
             fileline++;
-            // Line 3 | side color settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // Line 4 | side color settings will be on this line, if there is nothing on this line then the default color settings are used.
             // configloader: Color Loader 2 | loads the colors based on the configuration settings
             colorrule2 = configfileoutput;
 
@@ -388,12 +438,12 @@ void configloader() {
             
             }
 
-            std::cout << "Done with line 3!\n";
+            std::cout << "Done with line 4!\n";
 
-        } else if (fileline == 4) {
+        } else if (fileline == 5) {
             
             fileline++;
-            // Line 4 | important color settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // Line 5 | important color settings will be on this line, if there is nothing on this line then the default color settings are used.
             // configloader: Color Loader 3 | loads the colors based on the configuration settings
             colorrule3 = configfileoutput;
 
@@ -420,38 +470,83 @@ void configloader() {
             
             }
 
-            std::cout << "Done with line 4!\n";
+            std::cout << "Done with line 5!\n";
 
-        } else if (fileline == 5) {
+        } else if (fileline == 6) {
             
             fileline++;
-            // Line 5 | bold text settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // Line 6 | bright text settings will be on this line, if there is nothing on this line then the default color settings are used.
             // configloader: Text Loader 1 | loads the text style based on the configuration settings
-            textrule = configfileoutput;
+            textrule1 = configfileoutput;
 
-            if (textrule == "n") {
+            if (textrule1 == "1") {
                 
-                whatists1 = "Off";
+                whatists1 = "Disabled";
                 
-            } else if (textrule == "b") {
+            } else if (textrule1 == "2") {
+
+                if (primarycolor == blue) {
+                    primarycolor = brightblue;
+                } else if (primarycolor == red) {
+                    primarycolor = brightred;
+                }
+
+                if (sidecolor == cyan) {
+                    sidecolor = brightcyan;
+                } else if (sidecolor == black) {
+                    sidecolor = brightblack;
+                }
+
+                if (importantcolor == yellow) {
+                    importantcolor = yellow;
+                } else if (importantcolor == white) {
+                    importantcolor = white;
+                }
+                
+                whatists1 = "Enabled";
+
+            } else if (textrule1 == "*") {
+                
+                whatists1 = "Disabled";
+            
+            } else {
+                
+                whatists1 = "Disabled";                
+            
+            }
+
+            std::cout << "Done with line 6!\n";
+
+        } else if (fileline == 7) {
+            
+            fileline++;
+            // Line 7 | bold text settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // configloader: Text Loader 2 | loads the text style based on the configuration settings
+            textrule2 = configfileoutput;
+
+            if (textrule2 == "1") {
+                
+                whatists2 = "Disabled";
+                
+            } else if (textrule2 == "2") {
 
                 primarycolor = primarycolor + bold;
                 importantcolor = importantcolor + bold;
                 sidecolor = sidecolor + bold;
 
-                whatists1 = "Enabled";
+                whatists2 = "Enabled";
 
-            } else if (textrule == "*") {
+            } else if (textrule2 == "*") {
                 
-                whatists1 = "Off";
+                whatists2 = "Disabled";
             
             } else {
                 
-                whatists1 = "Off";                
+                whatists2 = "Disabled";                
             
             }
 
-            std::cout << "Done with line 5!\n";
+            std::cout << "Done with line 7!\n";
 
         }
          
@@ -474,12 +569,12 @@ void userprompt() {
     
     if (username == "NO USERNAME") {
 
-        std::cout << sidecolor << " "; std::getline(std::cin, userinput); std::cout << white;
+        std::cout << sidecolor << promptcharacter <<" "; std::getline(std::cin, userinput); std::cout << white;
 
 
     } else {
         
-        std::cout << sidecolor << username << "  "; std::getline(std::cin, userinput); std::cout << white;
+        std::cout << sidecolor << username << " "<< promptcharacter <<" "; std::getline(std::cin, userinput); std::cout << white;
 
     }
 
@@ -622,7 +717,8 @@ void versioncommand() {
 What the user will type to end the command they are in, if they arent in one then devenv will end and control will return to devenv.cpp. */
 void endcommand() {
     std::cout << importantcolor << "Closing...\n";
-    configfile.close();
+    configfile_I.close();
+    configfile_O.close();
     activateswitch = false;
     std::cout << "Done!\n";
 }
@@ -646,11 +742,11 @@ void configcommand() {
     std::cout << "What setup tool would you like to use?\n";
     std::cout << "I - Info on making Den configuration files, editing Den configuration files, etc. [Recommended if this is your first time.]\n";
     std::cout << "|\n";
-    std::cout << "1 - Create new Den configuration file.\n";
+    std::cout << "1 - Create new Den configuration file (or edit one if one already exists). \n";
     std::cout << "|\n";
-    std::cout << "2 - Edit/load a existing Den configuration file or the current Den configuration settings.\n";
+    std::cout << "2 - Load a existing Den configuration file or the current Den configuration settings.\n";
     std::cout << "|\n";
-    std::cout << "3 - Read contents of existing Den configuration file or read current Den configuration settings loaded from a existing file.\n";
+    std::cout << "3 - Read contents of existing Den configuration file or read current Den configuration settings.\n";
     std::cout << "|\n";
     std::cout << "C - Cancel command.\n";
     std::cout << "\\___ ";
@@ -698,15 +794,228 @@ void configcommand() {
         std::cout << primarycolor;
         username = userinput;
 
-        //std::cout << "First, what is your name? (this will be your username, if this will be your 2nd Den configuration file then the file will be called \"username.devenvconfig\")\n";
-        std::cout << "Username is \"" << username << "\", saving to Den configuration file!\n";
+        std::cout << "Secondly, what do you want the prompt character to be? (this will be the character that shows after the username is printed in the userprompt)\n";
+        std::cout << "1 - \">\" (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - \"\" \n";
+        std::cout << "\\___ ";
+        
+        userprompt();
+        std::cout << primarycolor;
+        pcrule = userinput;
+        
+        if (pcrule == "1") {
+            
+            promptcharacter = ">";
+        
+        } else if (pcrule == "2") {
+                
+            promptcharacter = "";
+
+        } else if (pcrule == "*") {
+                
+            promptcharacter = ">";
+
+        } else {
+                
+            promptcharacter = ">";
+
+        }    
+
+        std::cout << "Then, what do you want the primary color to be? \n";
+        std::cout << "1 - Blue (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - Red \n";
+        std::cout << "\\___ ";
+
+        userprompt();
+        std::cout << primarycolor;
+        colorrule1 = userinput;
+
+        if (colorrule1 == "1") {
+            
+            primarycolor = blue;
+            whatispc = "Blue";
+
+        } else if (colorrule1 == "2") {
+                
+            primarycolor = red;
+            whatispc = "Red";
+
+        } else if (colorrule1 == "*") {
+
+            primarycolor = blue;
+            whatispc = "Blue";
+            
+        } else {
+          
+            primarycolor = blue;
+            whatispc = "Blue";
+
+        }
+
+        std::cout << "and the side color? \n";
+        std::cout << "1 - Cyan (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - Black \n";
+        std::cout << "\\___ ";
+
+        userprompt();
+        std::cout << primarycolor;
+        colorrule2 = userinput;
+
+        if (colorrule2 == "1") {
+           
+            sidecolor = cyan;
+            whatissc = "Cyan";
+
+        } else if (colorrule2 == "2") {
+                
+            sidecolor = black;
+            whatissc = "Black";
+        } else if (colorrule2 == "*") {
+                
+            sidecolor = cyan;
+            whatissc = "Cyan";
+    
+        } else {
+                
+            sidecolor = cyan;
+            whatissc = "Cyan";
+            
+        }
+
+        std::cout << "Important color? \n";
+        std::cout << "1 - Yellow (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - White \n";
+        std::cout << "\\___ ";
+
+        userprompt();
+        std::cout << primarycolor;
+        colorrule3 = userinput;
+
+        if (colorrule3 == "1") {
+            
+            importantcolor = yellow;
+            whatisic = "Yellow";
+
+        } else if (colorrule3 == "2") {
+
+            importantcolor = white;
+            whatisic = "White";
+        
+        } else if (colorrule2 == "*") {
+                
+            importantcolor = yellow;
+            whatisic = "Yellow";
+            
+        } else {
+                
+            importantcolor = yellow;
+            whatisic = "Yellow";
+            
+        }
+
+        std::cout << "Now onto text styles, do you want text style 1... \n";
+        std::cout << "1 - Disabled (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - Enabled \n";
+        std::cout << "\\___ ";
+        
+        userprompt();
+        std::cout << primarycolor;
+        textrule1 = userinput;
+
+        if (textrule1 == "1") {
+                
+            whatists1 = "Disabled";
+                
+        } else if (textrule1 == "2") {
+
+            if (primarycolor == blue) {
+                primarycolor = brightblue;
+            } else if (primarycolor == red) {
+                primarycolor = brightred;
+            }
+
+            if (sidecolor == cyan) {
+                sidecolor = brightcyan;
+            } else if (sidecolor == black) {
+                sidecolor = brightblack;
+            }
+
+            if (importantcolor == yellow) {
+                importantcolor = yellow;
+            } else if (importantcolor == white) {
+                importantcolor = white;
+            }
+                
+            whatists1 = "Enabled";
+
+        } else if (textrule1 == "*") {
+                
+            whatists1 = "Disabled";
+            
+        } else {
+                
+            whatists1 = "Disabled";                
+            
+        }
+
+        std::cout << "And text style 2? \n";
+        std::cout << "1 - Disabled (default) \n";
+        std::cout << "|\n";
+        std::cout << "2 - Enabled \n";
+        std::cout << "\\___ ";
+
+        userprompt();
+        std::cout << primarycolor;
+        textrule2 = userinput;
+
+        if (textrule2 == "1") {
+                
+            whatists2 = "Disabled";
+                
+        } else if (textrule2 == "2") {
+
+            primarycolor = primarycolor + bold;
+            importantcolor = importantcolor + bold;
+            sidecolor = sidecolor + bold;
+
+            whatists2 = "Enabled";
+
+        } else if (textrule2 == "*") {
+                
+            whatists2 = "Disabled";
+            
+        } else {
+                
+            whatists2 = "Disabled";                
+            
+        }
+
+        std::cout << "Username is \"" << username << "\"" << std::endl;
+        std::cout << "Prompt Character is " << promptcharacter << std::endl;
+        std::cout << "Primary Color is " << whatispc << std::endl;
+        std::cout << "Side Color is " << whatissc << std::endl;
+        std::cout << "Important Color is " << whatisic << std::endl;
+        std::cout << "Text Style 1 (bright text) is " << whatists1 << std::endl;
+        std::cout << "Text Style 2 (bold text) is " << whatists2 << std::endl;
+        std::cout << "Saving to Den configuration file!" << std::endl;
 
         // TODO make devenv check to see if there is already a .devenvconfig file (maybe using std::filesystem::exists ?) and if there is then have devenv make a new one
         // TODO make devenv check for stuff in the file and tell the user that there is stuff in the file and that its going to make a new devenvconfig file
-        std::ofstream configfile(configfilename);
-        configfile << username << "\n";
-        
-        std::cout << "Done!\n";
+        configfile_O << username << std::endl;
+        configfile_O << pcrule << std::endl;
+        configfile_O << colorrule1 << std::endl;
+        configfile_O << colorrule2 << std::endl;
+        configfile_O << colorrule3 << std::endl;
+        configfile_O << textrule1 << std::endl;
+        configfile_O << textrule2 << std::endl;
+        configfile_O.close();
+
+        std::cout << "Done! You might have to restart for all of the changes to work.\n";
     
     } else if (userinput == "2") {
 
@@ -730,9 +1039,10 @@ void configcommand() {
 
         if (userinput == "1") {
             
+
             std::cout << "Current configuration file = " << configfilename;
 
-            while (getline(configfile, configfileoutput)) {
+            while (getline(configfile_I, configfileoutput)) {
 
                 std::cout << "Line " << fileline << "| " << configfileoutput;
                 fileline++;
@@ -742,10 +1052,12 @@ void configcommand() {
         } else if (userinput == "2") {
 
             std::cout << "Username: " << username << "\n";
+            std::cout << "Prompt Character: " << promptcharacter << "\n";
             std::cout << "Primary Color: " << whatispc << "\n";
             std::cout << "Side Color: " << whatissc << "\n";
             std::cout << "Important Color: " << whatisic << "\n";
-            std::cout << "Text Style 1 (Bold Text): " << whatists1 << "\n";
+            std::cout << "Text Style 1 (Bright Text): " << whatists1 << "\n";
+            std::cout << "Text Style 2 (Bold Text): " << whatists2 << "\n";
 
 
 
