@@ -23,11 +23,11 @@ int main() {
     
     if (username == "NO USERNAME") {
      
-        std::cout << primarycolor << "Goodbye.\n";
+        std::cout << primarycolor << "Goodbye." << std::endl;
     
     } else {
      
-        std::cout << primarycolor << "Goodbye, " << semiimportantcolor << username << "\n";
+        std::cout << primarycolor << "Goodbye, " << semiimportantcolor << username << std::endl;
 
     }
     

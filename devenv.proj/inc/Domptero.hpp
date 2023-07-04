@@ -93,6 +93,11 @@ int fileline = 1;
 The column of a file fstream is reading. */
 int filecolumn = 1;
 
+/* textrule var. sets the text style (default: normal).
+-------------------------------------------
+Is a rule that sets the text style, if n: normal, if b: bold. */
+std::string textrule;
+
 /* colorrule1 var. sets the primary color (default: blue).
 -------------------------------------------
 Is a rule that sets the primary color, if 1: blue, if 2: red. */
@@ -133,9 +138,27 @@ std::string semiimportantcolor = green;
 Is magenta. */
 std::string errorcolor = magenta;
 
+/* whatispc var. Displays what the primary color is when printed.
+-------------------------------------------
+Can either be blue or red. */
+std::string whatispc;
+
+/* whatissc var. Displays what the side color is when printed.
+-------------------------------------------
+Can either be cyan or black. */
+std::string whatissc;
+
+/* whatisic var. Displays what the important color is when printed.
+-------------------------------------------
+Can either be yellow or white. */
+std::string whatisic;
 
 // #### x error and output settings >>>>
 
+/* X output: type 0 (recieved SIGINT signal). 
+-------------------------------------------
+Is true if: the user does CTRL+C or a SIGINT signal is recieved */
+bool xOUTPUTt0;
 
 /* X output: type 1 (command cancelled). 
 -------------------------------------------
@@ -179,6 +202,7 @@ bool xERRORt2s1;
 void activate();
 void master();
 void configloader();
+void colorloader();
 void userprompthandler();
 void userprompt();
 void userinputhandler();
@@ -200,12 +224,12 @@ void filetoolscommand();
 // #### function definition >>>>
 
 
-// FIXME this just doesnt want to work properly
 /* signalhandler func. Handles the sigint signal. (uses signal.h)
 -------------------------------------------
 If the user does ctrl+c (sigint) this func will start and it will tell them to use the endcommand (not completely working yet). */
 void signalhandler(int signum) {
-   std::cout << "\nPlease run the end command, \"end.\"" << std::endl;
+    xOUTPUTt0 = true;
+    x();
 }
 
 /* activate func. Activates Domptero.
@@ -283,7 +307,7 @@ void configloader() {
             
             fileline++;
             // Line 1 | the username will be on this line
-            // Username Loader | loads the username based on the configuration settings
+            // configloader: Username Loader | loads the username based on the configuration settings
             username = configfileoutput;
 
             if (username == "*") {
@@ -298,7 +322,7 @@ void configloader() {
             
             fileline++;
             // Line 2 | primary color settings will be on this line, if there is nothing on this line then the default color settings are used.
-            // Color Loader 1 | loads the colors based on the configuration settings
+            // configloader: Color Loader 1 | loads the colors based on the configuration settings
             colorrule1 = configfileoutput;
 
             if (colorrule1 == "1") {
@@ -324,8 +348,8 @@ void configloader() {
         } else if (fileline == 3) {
 
             fileline++;
-            // Line 3 | primary color settings will be on this line, if there is nothing on this line then the default color settings are used.
-            // Color Loader 2 | loads the colors based on the configuration settings
+            // Line 3 | side color settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // configloader: Color Loader 2 | loads the colors based on the configuration settings
             colorrule2 = configfileoutput;
 
             if (colorrule2 == "1") {
@@ -351,9 +375,9 @@ void configloader() {
 
         } else if (fileline == 4) {
             
-            fileline++;
-            // Line 4 | primary color settings will be on this line, if there is nothing on this line then the default color settings are used.
-            // Color Loader 3 | loads the colors based on the configuration settings
+            // fileline++;
+            // Line 4 | important color settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // configloader: Color Loader 3 | loads the colors based on the configuration settings
             colorrule3 = configfileoutput;
 
             if (colorrule3 == "1") {
@@ -377,7 +401,63 @@ void configloader() {
 
             std::cout << "Done with line 4!\n";
 
-        } 
+        } else if (fileline == 5) {
+            
+            fileline = 1;
+            // fileline++;
+            // Line 4 | bold text settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // configloader: Text Loader | loads the colors based on the configuration settings
+            textrule = configfileoutput;
+
+            if (textrule == "1") {
+            
+                importantcolor = yellow;
+
+            } else if (textrule == "2") {
+
+                // TODO change to a better color
+                importantcolor = white;
+        
+            } else if (textrule == "*") {
+                
+                importantcolor = yellow;
+            
+            } else {
+                
+                importantcolor = yellow;
+            
+            }
+
+            std::cout << "Done with line 4!\n";
+        }
+         
+    }
+
+    colorloader();
+
+}
+
+/* colorloader func. Loads color settings
+-------------------------------------------
+Takes the color settings and maps them to strings that can be printed if the user wants to see what their settings are. */
+void colorloader() {
+    
+    if (primarycolor == blue) {
+        whatispc = "Blue";
+    } else if (primarycolor == red) {
+        whatispc = "Red";
+    }
+
+    if (sidecolor == cyan) {
+        whatissc = "Cyan";
+    } else if (sidecolor == black) {
+        whatissc = "Black";
+    }
+
+    if (importantcolor == yellow) {
+        whatisic = "Yellow";
+    } else if (importantcolor == white) {
+        whatisic = "White";
     }
 
 }
@@ -450,8 +530,11 @@ Runs everytime userprompthandler is run to catch errors and extra output. If a e
 void x() {
     
     std::cout << errorcolor;
-
-    if (xOUTPUTt1 == true) {
+    if (xOUTPUTt0 == true) {
+        std::cout << "\nPlease run the end command, \"end.\"\n";
+        xOUTPUTt0 = false;
+    }
+    else if (xOUTPUTt1 == true) {
         std::cout << "command cancelled. \n";
         xOUTPUTt1 = false;
     } else if (xERRORt1 == true) {
@@ -566,9 +649,9 @@ void configcommand() {
     std::cout << "What setup tool would you like to use?\n";
     std::cout << "I - Info on making Den configuration files, editing Den configuration files, etc. [Recommended if this is your first time.]\n";
     std::cout << "|\n";
-    std::cout << "1 - Edit/load a existing Den configuration file.\n";
+    std::cout << "1 - Create new Den configuration file.\n";
     std::cout << "|\n";
-    std::cout << "2 - Create new Den configuration file.\n";
+    std::cout << "2 - Edit/load a existing Den configuration file or the current Den configuration settings.\n";
     std::cout << "|\n";
     std::cout << "3 - Read contents of existing Den configuration file or read current Den configuration settings loaded from a existing file.\n";
     std::cout << "|\n";
@@ -611,16 +694,6 @@ void configcommand() {
     
     } else if (userinput == "1") {
         
-        std::cout << "What is the name of the Den configuration file?";
-        userprompt();
-        configfilename = userinput;
-        // This will cause the configuration settings to be loaded again
-        configdoneswitch = false;
-        
-        std::cout << "Done!";
-    
-    } else if (userinput == "2") {
-
         std::cout << "Beginning Den configuration/setup...\n";
         std::cout << "First, what is your name? (this will be your username, if this will be your 2nd Den configuration file then the file will be called \"username.devenvconfig\")\n";
 
@@ -632,11 +705,22 @@ void configcommand() {
 
         // TODO make devenv check to see if there is already a .devenvconfig file (maybe using std::filesystem::exists ?) and if there is then have devenv make a new one
         // TODO make devenv check for stuff in the file and tell the user that there is stuff in the file and that its going to make a new devenvconfig file
-        std::ofstream configfile(".devenvconfig");
+        std::ofstream configfile(configfilename);
         configfile << username << "\n";
         
         std::cout << "Done!\n";
+    
+    } else if (userinput == "2") {
 
+        std::cout << "What is the name of the Den configuration file?\n";
+        std::cout << "\\___ ";
+        userprompt();
+        configfilename = userinput;
+        // This will cause the configuration settings to be loaded again
+        configdoneswitch = false;
+        
+        std::cout << "Done!";
+        
     } else if (userinput == "3") {
         
         std::cout << "1 - Print existing Den configuration file.\n";
@@ -660,15 +744,9 @@ void configcommand() {
         } else if (userinput == "2") {
 
             std::cout << "Username: " << username << "\n";
-            std::cout << "Color Rules" << "\n";
-            std::cout << "Color Rule 1: " << colorrule1 << "\n";
-            std::cout << "Color Rule 2: " << colorrule2 << "\n";
-            std::cout << "Color Rule 3: " << colorrule3 << "\n";
-            // TODO find a way to be able to print the color settings
-            // the below is commented because its broken
-            //std::cout << "Primary Color: " << primarycolor << "\n";
-            //std::cout << "Side Color: " << sidecolor << "\n";
-            //std::cout << "Important Color: " << importantcolor << "\n";
+            std::cout << "Primary Color: " << whatispc << "\n";
+            std::cout << "Side Color: " << whatissc << "\n";
+            std::cout << "Important Color: " << whatisic << "\n";
 
 
         } else {
