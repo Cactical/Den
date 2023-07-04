@@ -1,6 +1,6 @@
 /*
 
-Version 0.4.5
+Version 1
 Domptero -- by Cactical
 Promptero (Version 1.1) but modified for devenv
 
@@ -708,7 +708,7 @@ void infocommand() {
 -------------------------------------------
 Shows version of devenv. */
 void versioncommand() {
-    std::cout << primarycolor << "devenv 0.4.5\n";
+    std::cout << primarycolor << "devenv 0.1\n";
 }
 
 
