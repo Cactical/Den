@@ -1,2 +1,17 @@
 - name: CMake Project Version
   uses: DarwinInnovation/cmake-project-version-action@v1.0
+description: "Read project version from a CMakeLists.txt file"
+inputs:
+  file:
+    description: "file name of CMake file"
+    required: true
+    default: "CMakeLists.txt"
+  path:
+    description: "location of project-level CMakeLists.txt"
+    required: true
+    default: "."
+outputs:
+  version:
+    description: "Full version string"
+  project:
+    description: "Project name"
