@@ -53,6 +53,11 @@ bool greeterswitch = true;
 This var is effectively a switch that controls whether activate will be on (activate will run) or off (activate wont run). Once activate() is called in the devenv file, control will be passed to Domptero and Domptero wil be in control forever, but you can return control to devenv by making activateswitch false in the devenv file, then control will return to the devenv file. You can also return control to Domptero by simply making activateswitch true and then calling activate() to start up Domptero again. */
 bool activateswitch = true;
 
+/* promptcharacter var. The character that that is printed in the prompt right after the username.
+-------------------------------------------
+This is the character that is printed after the username in the prompt, is an arrow icon () (cant be seen on all terminals/fonts) but can be configured to be a normal arrow character (>) */
+std::string promptcharacter = "";
+
 /* userinput var. Input from the user. 
 -------------------------------------------
 When userprompt is called, the user types something and whatever they type becomes userinput and userinputhandler decides what to do with userinput. */
@@ -138,6 +143,11 @@ std::string semiimportantcolor = green;
 Is magenta. */
 std::string errorcolor = magenta;
 
+/* whatists1 var. Displays what the 1st text style is when printed.
+-------------------------------------------
+Can either be "Off" (normal) or "Enabled" (bold). */
+std::string whatists1;
+
 /* whatispc var. Displays what the primary color is when printed.
 -------------------------------------------
 Can either be blue or red. */
@@ -202,7 +212,6 @@ bool xERRORt2s1;
 void activate();
 void master();
 void configloader();
-void colorloader();
 void userprompthandler();
 void userprompt();
 void userinputhandler();
@@ -328,18 +337,22 @@ void configloader() {
             if (colorrule1 == "1") {
             
                 primarycolor = blue;
+                whatispc = "Blue";
 
             } else if (colorrule1 == "2") {
                 
                 primarycolor = red;
-            
+                whatispc = "Red";
+
             } else if (colorrule1 == "*") {
 
                 primarycolor = blue;
+                whatispc = "Blue";
             
             } else {
           
                 primarycolor = blue;
+                whatispc = "Blue";
 
             }
             
@@ -355,19 +368,23 @@ void configloader() {
             if (colorrule2 == "1") {
            
                 sidecolor = cyan;
+                whatissc = "Cyan";
 
             } else if (colorrule2 == "2") {
                 
                 // TODO change to a better color
                 sidecolor = black;
-            
+                whatissc = "Black";
+
             } else if (colorrule2 == "*") {
                 
                 sidecolor = cyan;
-            
+                whatissc = "Cyan";
+           
             } else {
                 
                 sidecolor = cyan;
+                whatissc = "Cyan";
             
             }
 
@@ -375,7 +392,7 @@ void configloader() {
 
         } else if (fileline == 4) {
             
-            // fileline++;
+            fileline++;
             // Line 4 | important color settings will be on this line, if there is nothing on this line then the default color settings are used.
             // configloader: Color Loader 3 | loads the colors based on the configuration settings
             colorrule3 = configfileoutput;
@@ -383,19 +400,23 @@ void configloader() {
             if (colorrule3 == "1") {
             
                 importantcolor = yellow;
+                whatisic = "Yellow";
 
             } else if (colorrule3 == "2") {
 
                 // TODO change to a better color
                 importantcolor = white;
+                whatisic = "White";
         
             } else if (colorrule2 == "*") {
                 
                 importantcolor = yellow;
+                whatisic = "Yellow";
             
             } else {
                 
                 importantcolor = yellow;
+                whatisic = "Yellow";
             
             }
 
@@ -403,61 +424,37 @@ void configloader() {
 
         } else if (fileline == 5) {
             
-            fileline = 1;
-            // fileline++;
-            // Line 4 | bold text settings will be on this line, if there is nothing on this line then the default color settings are used.
-            // configloader: Text Loader | loads the colors based on the configuration settings
+            fileline++;
+            // Line 5 | bold text settings will be on this line, if there is nothing on this line then the default color settings are used.
+            // configloader: Text Loader 1 | loads the text style based on the configuration settings
             textrule = configfileoutput;
 
-            if (textrule == "1") {
-            
-                importantcolor = yellow;
+            if (textrule == "n") {
+                
+                whatists1 = "Off";
+                
+            } else if (textrule == "b") {
 
-            } else if (textrule == "2") {
+                primarycolor = primarycolor + bold;
+                importantcolor = importantcolor + bold;
+                sidecolor = sidecolor + bold;
 
-                // TODO change to a better color
-                importantcolor = white;
-        
+                whatists1 = "Enabled";
+
             } else if (textrule == "*") {
                 
-                importantcolor = yellow;
+                whatists1 = "Off";
             
             } else {
                 
-                importantcolor = yellow;
+                whatists1 = "Off";                
             
             }
 
-            std::cout << "Done with line 4!\n";
+            std::cout << "Done with line 5!\n";
+
         }
          
-    }
-
-    colorloader();
-
-}
-
-/* colorloader func. Loads color settings
--------------------------------------------
-Takes the color settings and maps them to strings that can be printed if the user wants to see what their settings are. */
-void colorloader() {
-    
-    if (primarycolor == blue) {
-        whatispc = "Blue";
-    } else if (primarycolor == red) {
-        whatispc = "Red";
-    }
-
-    if (sidecolor == cyan) {
-        whatissc = "Cyan";
-    } else if (sidecolor == black) {
-        whatissc = "Black";
-    }
-
-    if (importantcolor == yellow) {
-        whatisic = "Yellow";
-    } else if (importantcolor == white) {
-        whatisic = "White";
     }
 
 }
@@ -701,6 +698,7 @@ void configcommand() {
         std::cout << primarycolor;
         username = userinput;
 
+        //std::cout << "First, what is your name? (this will be your username, if this will be your 2nd Den configuration file then the file will be called \"username.devenvconfig\")\n";
         std::cout << "Username is \"" << username << "\", saving to Den configuration file!\n";
 
         // TODO make devenv check to see if there is already a .devenvconfig file (maybe using std::filesystem::exists ?) and if there is then have devenv make a new one
@@ -747,6 +745,8 @@ void configcommand() {
             std::cout << "Primary Color: " << whatispc << "\n";
             std::cout << "Side Color: " << whatissc << "\n";
             std::cout << "Important Color: " << whatisic << "\n";
+            std::cout << "Text Style 1 (Bold Text): " << whatists1 << "\n";
+
 
 
         } else {
