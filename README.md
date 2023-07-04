@@ -30,12 +30,12 @@ To get started with Den, run the Filetools command, "filetools", so you can star
 
 To exit Den, please run the End command, "end".
 
-[Version)-----(v0.1/Alpha 1]
+[Version)-----(v0.4.5/Alpha 4.5]
 
-[Date Version was Released)-----(11/23/22]
+[Date Version was Released)-----(7/4/23]
 
-[Date of Last Commit)-----(11/25/22]
+[Date of Last Commit)-----(7/4/23]
 
-[Version Being Developed)-----(v0.2/Alpha 2]
+[Version Being Developed)-----(v0.5/Alpha 5]
 
 
